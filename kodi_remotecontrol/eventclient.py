@@ -15,14 +15,15 @@ ACTION_EXECBUILTIN = b"\1"
 class EventClient:
     def __init__(self, api_host,
                        api_udp_port=9777,
-                       api_http_port=8080,
-                       api_http_login=None,
-                       api_http_pwd=None):
+                       api_http_port=80,
+                       api_http_login="osmc",
+                       api_http_pwd="osmc"):
         """event client class"""
         self.api_host = api_host
         self.api_udp_port = api_udp_port
         self.api_http_port = api_http_port
-
+        self.api_http_login = api_http_login
+        self.api_http_pwd = api_http_pwd
         self.api_token = int(time.time())
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sock.bind(('0.0.0.0', 1444))
@@ -47,7 +48,7 @@ class EventClient:
                 try:
                     # send ping to kodi jsonrpc api
                     logging.debug("Pinging backend...")
-                    r = requests.post(url=api_url, json=p)
+                    r = requests.post(url=api_url, json=p, auth=(self.api_http_login, self.api_http_pwd))
                     
                     if r.status_code == 200:
                         logging.debug("Backend response: %s" % r.json()['result'])

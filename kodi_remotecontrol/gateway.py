@@ -13,12 +13,21 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--destport", type=int,
                     default=9777,
                     help="destination backend udp port default=9777")
+parser.add_argument("--destportweb", type=str,
+                    default="80",
+                    help="destination backend host web ui address default=80"), 
 parser.add_argument("--desthost", type=str,
                     default="127.0.0.1",
                     help="destination backend host address default=127.0.0.1"), 
 parser.add_argument("--bindport", type=int,
                     default=8081,
                     help="bind on port default=8081")
+parser.add_argument("--username", type=str,
+                    default="osmc",
+                    help="API user")
+parser.add_argument("--password", type=str,
+                    default="osmc",
+                    help="API password")
 parser.add_argument("--bindhost", type=str,
                     default="0.0.0.0",
                     help="bind on host default=0.0.0.0")
@@ -71,7 +80,7 @@ def start_remotecontrol():
 
     # prepare the event client with destination ip/port provided
     eventapi = eventclient.EventClient(api_host=args.desthost, 
-                                       api_udp_port=args.destport)
+                                       api_udp_port=args.destport, api_http_port=args.destportweb, api_http_login=args.username, api_http_pw=args.password)
 
     # prepare the websocket server
     start_server = websockets.serve(handle_message, args.bindhost, args.bindport)

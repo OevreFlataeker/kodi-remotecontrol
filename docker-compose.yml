@@ -1,0 +1,31 @@
+version: '3'
+services:
+  kodi-remotecontrol:
+    image: "kodi-remotecontrol:latest"
+    restart: unless-stopped
+    container_name: kodi-remotecontrol
+    ports:
+      - "127.0.0.1:8081:8081"
+    environment:
+      - KODI_HOST=osmclounge
+    networks:
+      - kodi
+
+  kodi-remoecontrol-client:
+
+    image: "kodi-remotecontrol-client:latest"
+    container_name: kodi-remotecontrol-client
+    environment:
+      - VUE_APP_KODI="ws://kodi-remotecontrol:8081"
+    restart: unless-stopped
+    depends_on:
+      - kodi-remotecontrol
+    networks: 
+      - kodi
+    ports:
+      - 127.0.0.1:8080:80
+
+networks:
+  kodi:
+    name: kodi
+
