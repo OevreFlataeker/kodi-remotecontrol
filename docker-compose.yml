@@ -1,6 +1,9 @@
 version: '3'
 services:
   kodi-remotecontrol:
+    build:
+      context: .
+      dockerfile: Dockerfile-gw
     image: "kodi-remotecontrol:latest"
     restart: unless-stopped
     container_name: kodi-remotecontrol
@@ -12,11 +15,13 @@ services:
       - kodi
 
   kodi-remoecontrol-client:
-
+    build:
+      context: .
+      dockerfile: Dockerfile-client
     image: "kodi-remotecontrol-client:latest"
     container_name: kodi-remotecontrol-client
     environment:
-      - VUE_APP_KODI="ws://kodi-remotecontrol:8081"
+      - VUE_APP_KODI="ws://127.0.0.1:8081"
     restart: unless-stopped
     depends_on:
       - kodi-remotecontrol
